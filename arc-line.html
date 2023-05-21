@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas Line Movement</title>
+</head>
+
+<body>
+  <canvas id="lineCanvas" width="200" height="200"></canvas>
+  <script>
+    const canvas = document.getElementById('lineCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let x = 0;
+    let y = 0;
+    let horizontalComplete = false;
+
+    function clearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function drawLineSegment() {
+      clearCanvas();
+
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      if (!horizontalComplete) {
+        x += 10;  // Change to desired horizontal step
+      } else {
+        y += 10;  // Change to desired vertical step
+      }
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    }
+
+    function updatePosition() {
+      if (x >= 200) {
+        horizontalComplete = true;
+      }
+    }
+
+    function animate() {
+      drawLineSegment();
+      updatePosition();
+
+      if (y < 200) {
+        requestAnimationFrame(animate);
+      }
+    }
+
+    animate();
+  </script>
+</body>
+
+</html>

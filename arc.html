@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Line Moving Along Rounded Rectangle</title>
+</head>
+
+<body>
+  <canvas id="myCanvas" width="800" height="400"></canvas>
+  <script>
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const rect = {
+      x: 100,
+      y: 100,
+      width: 600,
+      height: 200,
+      borderRadius: 20,
+    };
+
+    const line = {
+      length: 50,
+      position: 0,
+      speed: 10,
+    };
+
+    function drawRoundedRect(x, y, width, height, borderRadius) {
+      ctx.beginPath();
+      ctx.moveTo(x + borderRadius, y);
+      ctx.lineTo(x + width - borderRadius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + borderRadius);
+      ctx.lineTo(x + width, y + height - borderRadius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - borderRadius, y + height);
+      ctx.lineTo(x + borderRadius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - borderRadius);
+      ctx.lineTo(x, y + borderRadius);
+      ctx.quadraticCurveTo(x, y, x + borderRadius, y);
+      ctx.closePath();
+      ctx.strokeStyle = 'orange';
+      ctx.stroke();
+    }
+
+    function drawLineOnRectBorder() {
+      const perimeter = 2 * (rect.width + rect.height - 4 * rect.borderRadius);
+      const linePosition = line.position % perimeter;
+
+      let x, y, angle;
+      if (linePosition < rect.width - rect.borderRadius) {
+        x = rect.x + linePosition;
+        y = rect.y;
+        angle = 0;
+      } else if (linePosition < rect.width) {
+        const arcLength = linePosition - rect.width + rect.borderRadius;
+        x = rect.x + rect.width - rect.borderRadius - Math.cos(Math.PI / 2 * arcLength / rect.borderRadius) * rect.borderRadius;
+        y = rect.y + Math.sin(Math.PI / 2 * arcLength / rect.borderRadius) * rect.borderRadius;
+        angle = -Math.PI / 2 * arcLength / rect.borderRadius;
+      } else if (linePosition < rect.width + rect.height - 2 * rect.borderRadius) {
+        x = rect.x + rect.width;
+        y = rect.y + (linePosition - rect.width + rect.borderRadius);
+        angle = Math.PI / 2;
+      } else if (linePosition < rect.width + rect.height - rect.borderRadius) {
+        const arcLength = linePosition - rect.width - rect.height + 2 * rect.borderRadius;
+        x = rect.x + rect.width - Math.sin(Math.PI / 2 * arcLength / rect.borderRadius) * rect.borderRadius;
+        y = rect.y + rect.height - rect.borderRadius + Math.cos(Math.PI / 2 * arcLength / rect.borderRadius) * rect.borderRadius;
+        angle = Math.PI - Math.PI / 2 * arcLength / rect.borderRadius;
+      } else if (linePosition < 2 * rect.width + rect.height - 4 * rect.borderRadius) {
+        x = rect.x + rect.width - (linePosition - rect.width - rect.height + 3 * rect.borderRadius);
+        y = rect.y + rect.height;
+        angle = Math.PI;
+      } else if (linePosition < 2 * rect.width + rect.height - 3 * rect.borderRadius) {
+        const arcLength = linePosition - 2 * rect.width - rect.height + 4 * rect.borderRadius;
+        x = rect.x + 2 * rect.borderRadius - rect.borderRadius + Math.cos(Math.PI / 2 * arcLength / rect.borderRadius) * rect.borderRadius;
+        y = rect.y + rect.height - Math.sin(Math.PI / 2 * arcLength / rect.borderRadius) * rect.borderRadius;
+        angle = -Math.PI * 3 / 2 + Math.PI / 2 * arcLength / rect.borderRadius;
+
+      } else {
+        x = rect.x;
+        y = rect.y + rect.height - (linePosition - 2 * rect.width - rect.height + 3 * rect.borderRadius);
+        angle = -Math.PI / 2;
+      }
+
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(line.length, 0);
+      ctx.strokeStyle = 'red';
+      ctx.stroke();
+      ctx.rotate(-angle);
+      ctx.translate(-x, -y);
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawRoundedRect(rect.x, rect.y, rect.width, rect.height, rect.borderRadius);
+      drawLineOnRectBorder();
+      line.position += line.speed;
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+
+</html>

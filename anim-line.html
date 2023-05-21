@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    html,
+    body,
+    canvas {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas" style="background-color: pink;"></canvas>
+</body>
+<script>
+  const canvas = document.getElementById('canvas')
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  //起点
+  var [x1, y1] = [10, 10];
+  //小球起点
+  var [x, y] = [10, 10];
+  //控制点
+  var [cx, cy] = [100, 0];
+  //终点
+  var [x2, y2] = [200, 200]
+  var t = 0
+
+  //画一条线
+  function draw() {
+    ctx.beginPath()
+    ctx.moveTo(10, 10)
+    ctx.quadraticCurveTo(cx, cy, x2, y2)
+    ctx.stroke()
+    ctx.closePath()
+  }
+
+  /*贝塞尔曲线上点位的控制*/
+  function computedPosition() {
+    if (y > 200) {
+      t = 0
+      x = 0
+      y = 0
+      return
+    }
+    x = Math.pow(1 - t, 2) * x1 + 2 * t * (1 - t) * cx + Math.pow(t, 2) * x2
+    y = Math.pow(1 - t, 2) * y1 + 2 * t * (1 - t) * cy + Math.pow(t, 2) * y2
+  }
+
+  function drawPoint() {
+    computedPosition()
+    ctx.beginPath()
+    ctx.fillStyle = "red"
+    ctx.arc(x, y, 10, 0, 2 * Math.PI)
+    ctx.fill()
+  }
+
+  let loopDraw = () => {
+    requestAnimationFrame(loopDraw)
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+    draw()
+    drawPoint()
+    t += 0.007//控制动画移动速度
+  }
+  loopDraw()//启动动画
+</script>
+
+</html>
