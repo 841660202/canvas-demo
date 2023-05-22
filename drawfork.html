@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas 三岔口</title>
+</head>
+
+<body style="background-color: cadetblue;">
+  <canvas id="myCanvas" width="300" height="300"></canvas>
+  <script>
+
+    const canvas = document.getElementById('myCanvas');
+
+    const ctx = canvas.getContext('2d');
+
+    // ctx.shadowColor = 'red';
+    // ctx.shadowBlur = 10;
+
+    // 绘制三岔口管道
+    function drawForkPipe() {
+      const lineWidth = 10;
+
+      // 设置管道线宽
+      ctx.lineWidth = lineWidth;
+
+      // 绘制竖直管道
+      ctx.beginPath();
+      ctx.strokeStyle = 'white';
+      ctx.moveTo(150, 50);
+      ctx.lineTo(150, 250);
+      ctx.stroke();
+
+      // 绘制左侧斜管道
+      ctx.beginPath();
+      ctx.moveTo(150, 100);
+      ctx.strokeStyle = 'white';
+
+      ctx.lineTo(50, 250);
+      ctx.stroke();
+
+      // 绘制右侧斜管道
+      ctx.beginPath();
+      ctx.strokeStyle = 'white';
+      ctx.moveTo(150, 100);
+      ctx.lineTo(250, 250);
+      ctx.stroke();
+
+      // 绘制交叉点
+      ctx.beginPath();
+      ctx.arc(150, 100, lineWidth / 2, 0, 2 * Math.PI);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+    }
+
+    drawForkPipe();
+  </script>
+</body>
+
+</html>

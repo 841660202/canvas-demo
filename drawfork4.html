@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canvas 三岔口</title>
+</head>
+
+<body style="background-color: cadetblue;">
+  <canvas id="myCanvas" width="300" height="300"></canvas>
+  <script>
+
+    const canvas = document.getElementById('myCanvas');
+
+    const ctx = canvas.getContext('2d');
+
+    // ctx.shadowColor = 'red';
+    // ctx.shadowBlur = 10;
+
+    // 绘制三岔口管道
+    function drawForkPipe() {
+      const lineWidth = 10;
+
+      // 设置管道线宽
+      ctx.lineWidth = lineWidth;
+
+      // 绘制竖直管道
+      ctx.beginPath();
+      ctx.strokeStyle = 'white';
+      ctx.moveTo(150, 50);
+      ctx.lineTo(150, 250);
+      ctx.stroke();
+
+      // 绘制左侧斜管道
+      // ctx.beginPath();
+      // ctx.moveTo(150, 100);
+      // ctx.strokeStyle = 'white';
+
+      // ctx.lineTo(50, 250);
+      // ctx.stroke();
+
+      // 绘制右侧斜管道
+      ctx.beginPath();
+      ctx.strokeStyle = 'white';
+      ctx.moveTo(150, 100);
+      ctx.lineTo(250, 100);
+      ctx.stroke();
+
+      // 绘制交叉点
+      ctx.beginPath();
+      ctx.arc(150, 100, lineWidth / 2, 0, 2 * Math.PI);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+    }
+
+
+
+    // 创建小球对象
+    class Ball {
+      constructor(x, y, radius, color, speed) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.color = color;
+        this.speed = speed;
+      }
+
+      // 绘制小球
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+
+      // 更新小球位置
+      update() {
+        this.y += this.speed;
+      }
+    }
+
+    // 初始化两个小球，设置不同的移动速度
+    const ball1 = new Ball(150, 50, 5, 'red', 1);
+    const ball2 = new Ball(150, 50, 5, 'blue', 1.5);
+
+    // 动画函数
+    function animate() {
+      // 清除画布
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 重新绘制三岔口管道
+      drawForkPipe();
+
+      // 更新并绘制小球
+      ball1.update();
+      ball2.update();
+      ball1.draw();
+      ball2.draw();
+
+      // 检查小球是否到达竖直管道的下端点
+      if (ball1.y < 250 && ball2.y < 250) {
+        requestAnimationFrame(animate);
+      }
+    }
+
+
+
+    // 开始动画
+    animate();
+  </script>
+</body>
+
+</html>
