@@ -24,7 +24,7 @@
 
       // 设置管道线宽
       ctx.lineWidth = lineWidth;
-
+      ctx.lineCap = 'round';
       // 绘制竖直管道
       ctx.beginPath();
       ctx.strokeStyle = 'white';
@@ -44,6 +44,7 @@
       ctx.beginPath();
       ctx.strokeStyle = 'white';
       ctx.moveTo(150, 100);
+      ctx.lineCap = 'round';
       ctx.lineTo(250, 100);
       ctx.stroke();
 
@@ -75,9 +76,17 @@
         ctx.moveTo(this.x1, this.y1);
         ctx.lineTo(this.x2, this.y2);
         ctx.strokeStyle = this.color;
+        // 创建线性渐变对象
+        // var gradientLinear = ctx.createLinearGradient(this.x1, this.y1, this.x2, this.y2);
+        // gradientLinear.addColorStop(0, 'red');
+        // gradientLinear.addColorStop(1, 'green');
+        // 填充线性渐变
+        // ctx.fillStyle = gradientLinear;
         ctx.stroke();
       }
 
+
+      // https://www.twle.cn/l/yufei/canvas/canvas-basic-gradient-line.html
       // 更新线条位置
       update() {
         this.y1 += this.speed;
@@ -93,7 +102,7 @@
 
     // 初始化线条，设置移动速度
     const line = new Line(150, 50, 150, 60, 'green', 10);
-    const line2 = new Line(150, 100, 250, 100, 'green', 10);
+    // const line2 = new Line(150, 100, 250, 100, 'green', 10);
 
     // 动画函数
     function animate() {
